@@ -1,3 +1,4 @@
+document.getElementById('error').style.display="none";
 // first function about searching food
 const searchFood =()=>{
     const searchField = document.getElementById('search-field');
@@ -13,9 +14,12 @@ const searchFood =()=>{
     fetch(url)
     .then(res=> res.json())
     .then(json=> displaySearchResult(json.meals))
+    .catch(error => displayError(error))
 
   }
-    
+    const displayError = error =>{
+      document.getElementById('error').style.display="block";
+    }
 }
 // 2nd function showing deatils of food search
 const displaySearchResult = meals => {
@@ -24,9 +28,7 @@ const displaySearchResult = meals => {
     // clear result
     // searchResult.innerHTML ='';.....(not recommended)
     searchResult.textContent='';
-    if(meals.length == 0){
-      // show no result found
-    }
+   
     
     //////////
 meals.forEach(meal => {
@@ -50,9 +52,15 @@ searchResult.appendChild(div)
 const loadMealDetail = mealId => {
     // console.log(mealId)
     const url=`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${mealId}`;
-    fetch(url)
-    .then(res => res.json())
-    .then(data => displayMealDetail(data.meals[0]))
+    try{
+      fetch(url)
+      .then(res => res.json())
+      .then(data => displayMealDetail(data.meals[0]))
+    }catch{
+      document.getElementById('error').style.display="block";
+
+    }
+   
     // look how to enter into the main object via array and objects
 }
 // 4rth funciton displaying that particular meal detail

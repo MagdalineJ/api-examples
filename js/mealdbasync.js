@@ -1,3 +1,4 @@
+document.getElementById('error').style.display="none";
 // first function about searching food
 const searchFood = async ()=>{
     const searchField = document.getElementById('search-field');
@@ -10,9 +11,15 @@ const searchFood = async ()=>{
   }else{
     // load data
     const url= `https://www.themealdb.com/api/json/v1/1/search.php?s=${searchText}`;
-    const res = await fetch(url);
-    const data = await res.json();
-    displaySearchResult(data.meals);
+    try{
+      const res = await fetch(url);
+      const data = await res.json();
+      displaySearchResult(data.meals)
+    }catch{
+document.getElementById('error').style.display="block";
+
+    }
+
     // fetch(url)
     // .then(res=> res.json())
     // .then(json=> displaySearchResult(json.meals))
@@ -48,8 +55,9 @@ try{
   })
 }catch{
   searchResult.textContent='';
-  const searchField = document.getElementById('search-field');
-  searchField.value='No Results Found!!!';
+  const errorField = document.getElementById('error-message');
+  errorField.innerText='No Results Found!!! '
+
  
   // const div = document.createElement('div');
   // div.innerHTML =`<h1> No Results Found !!!</h1>`;
@@ -64,9 +72,15 @@ try{
 const loadMealDetail =async mealId => {
     // console.log(mealId)
     const url=`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${mealId}`; 
-    const res= await fetch(url);
-    const data = await res.json();
-    displayMealDetail(data.meals[0]);
+    try{
+      const res= await fetch(url);
+      const data = await res.json();
+      displayMealDetail(data.meals[0]);
+    }catch{
+document.getElementById('error').style.display="block";
+
+    }
+
     // fetch(url)
     // .then(res => res.json())
     // .then(data => displayMealDetail(data.meals[0]))
